@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="580" viewBox="0 0 960 580" role="img" aria-labelledby="title desc">
+<title id="title">Osnovne mrežne topologije</title>
+<desc id="desc">Četiri skice. Zvijezda: četiri uređaja spojena sa središnjim preklopnikom. Sabirnica: četiri uređaja priključena na zajednički vod. Prsten: četiri čvora povezana u zatvoreni slijed. Potpuna mreža: četiri čvora i šest veza, po jedna između svakog para.</desc>
+<defs>
+<style>
+.card{fill:#f5f8fc;stroke:#d8e2ec;stroke-width:1.5}.link{fill:none;stroke:#287a91;stroke-width:3;stroke-linejoin:round}.node{fill:#fff;stroke:#071b50;stroke-width:2}.label{font:18px Arial,sans-serif;fill:#071b50;text-anchor:middle;dominant-baseline:central}.heading{font:bold 21px Arial,sans-serif;fill:#071b50;text-anchor:middle}.caption{font:16px Arial,sans-serif;fill:#46576a;text-anchor:middle}
+</style>
+</defs>
+<g transform="translate(15 15)">
+<rect class="card" width="450" height="265" rx="12"/>
+<text class="heading" x="225" y="34">Zvijezda</text>
+<g class="link"><path d="M100 90L225 145L350 90"/><path d="M100 195L225 145L350 195"/></g>
+<rect x="190" y="122" width="70" height="46" rx="8" fill="#071b50"/>
+<text x="225" y="146" class="label" style="fill:#fff">SW</text>
+<g class="node"><circle cx="100" cy="90" r="22"/><circle cx="350" cy="90" r="22"/><circle cx="100" cy="195" r="22"/><circle cx="350" cy="195" r="22"/></g>
+<g class="label"><text x="100" y="90">A</text><text x="350" y="90">B</text><text x="100" y="195">C</text><text x="350" y="195">D</text></g>
+<text class="caption" x="225" y="245">Zasebne veze prema središtu</text>
+</g>
+<g transform="translate(495 15)">
+<rect class="card" width="450" height="265" rx="12"/>
+<text class="heading" x="225" y="34">Sabirnica</text>
+<g class="link"><path d="M45 170H405"/><path d="M75 95V170M175 95V170M275 95V170M375 95V170"/></g>
+<g class="node"><circle cx="75" cy="95" r="22"/><circle cx="175" cy="95" r="22"/><circle cx="275" cy="95" r="22"/><circle cx="375" cy="95" r="22"/></g>
+<g class="label"><text x="75" y="95">A</text><text x="175" y="95">B</text><text x="275" y="95">C</text><text x="375" y="95">D</text></g>
+<text class="caption" x="225" y="205">Zajednički prijenosni vod</text>
+<text class="caption" x="225" y="245">Uređaji dijele medij</text>
+</g>
+<g transform="translate(15 300)">
+<rect class="card" width="450" height="265" rx="12"/>
+<text class="heading" x="225" y="34">Prsten</text>
+<path class="link" d="M110 95H340V190H110Z"/>
+<g class="node"><circle cx="110" cy="95" r="22"/><circle cx="340" cy="95" r="22"/><circle cx="340" cy="190" r="22"/><circle cx="110" cy="190" r="22"/></g>
+<g class="label"><text x="110" y="95">A</text><text x="340" y="95">B</text><text x="340" y="190">C</text><text x="110" y="190">D</text></g>
+<text class="caption" x="225" y="245">Svaki čvor ima dva susjeda</text>
+</g>
+<g transform="translate(495 300)">
+<rect class="card" width="450" height="265" rx="12"/>
+<text class="heading" x="225" y="34">Potpuno mrežasta topologija</text>
+<g class="link"><path d="M110 95H340V190H110Z"/><path d="M110 95L340 190M340 95L110 190"/></g>
+<g class="node"><circle cx="110" cy="95" r="22"/><circle cx="340" cy="95" r="22"/><circle cx="340" cy="190" r="22"/><circle cx="110" cy="190" r="22"/></g>
+<g class="label"><text x="110" y="95">A</text><text x="340" y="95">B</text><text x="340" y="190">C</text><text x="110" y="190">D</text></g>
+<text class="caption" x="225" y="245">Izravna veza između svakog para</text>
+</g>
+</svg>

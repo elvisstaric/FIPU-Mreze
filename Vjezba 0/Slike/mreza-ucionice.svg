@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="430" viewBox="0 0 940 430" role="img" aria-labelledby="title desc">
+<title id="title">Pojednostavljena mreža učionice</title>
+<desc id="desc">PC1, PC2 i mrežni pisač povezani su zasebnim Ethernet vezama s preklopnikom SW1. SW1 je povezan s usmjernikom R1, a R1 s drugim mrežama.</desc>
+<rect width="940" height="430" rx="16" fill="#f5f8fc"/>
+<g fill="none" stroke="#287a91" stroke-width="3" stroke-linejoin="round">
+<path d="M140 105V220H370"/>
+<path d="M470 105V185"/>
+<path d="M800 105V220H570"/>
+<path d="M470 255V320"/>
+<path d="M570 355H700"/>
+</g>
+<g font-family="Arial, sans-serif" text-anchor="middle">
+<g fill="#fff" stroke="#071b50" stroke-width="2">
+<rect x="40" y="35" width="200" height="70" rx="10"/>
+<rect x="370" y="35" width="200" height="70" rx="10"/>
+<rect x="700" y="35" width="200" height="70" rx="10"/>
+</g>
+<g fill="#071b50" font-size="21" font-weight="bold">
+<text x="140" y="64">PC1</text><text x="470" y="64">PC2</text><text x="800" y="64">Mrežni pisač</text>
+</g>
+<g fill="#46576a" font-size="15">
+<text x="140" y="88">Računalo</text><text x="470" y="88">Računalo</text><text x="800" y="88">Lokalni ispis</text>
+</g>
+<rect x="370" y="185" width="200" height="70" rx="10" fill="#071b50"/>
+<text x="470" y="216" font-size="21" font-weight="bold" fill="#fff">SW1</text>
+<text x="470" y="241" font-size="15" fill="#d4e9f8">Preklopnik</text>
+<rect x="370" y="320" width="200" height="70" rx="10" fill="#287a91"/>
+<text x="470" y="350" font-size="21" font-weight="bold" fill="#fff">R1</text>
+<text x="470" y="376" font-size="15" fill="#fff">Usmjernik</text>
+<rect x="700" y="320" width="200" height="70" rx="10" fill="#e0ebf5" stroke="#071b50" stroke-width="2"/>
+<text x="800" y="362" font-size="19" font-weight="bold" fill="#071b50">Druge mreže</text>
+<text x="320" y="164" font-size="15" fill="#46576a">Ethernet veze</text>
+</g>
+</svg>

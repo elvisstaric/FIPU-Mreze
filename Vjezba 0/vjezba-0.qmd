@@ -1,0 +1,717 @@
+---
+title: "Uvodna vježba - Osnove računalnih mreža i priprema radnog okruženja"
+subtitle: "Osnovni mrežni pojmovi i priprema GNS3 okruženja"
+author: "Elvis Starić"
+lang: hr
+format:
+  html:
+    theme: cosmo
+    page-layout: full
+    toc: true
+    toc-location: body
+    toc-title: "Sadržaj"
+    toc-depth: 2
+    number-sections: true
+    code-copy: true
+    embed-resources: true
+    html-math-method: plain
+execute:
+  enabled: false
+---
+
+<style>
+.quarto-title-block { display: none; }
+.cover-page {
+  width: min(1100px, 100%);
+  min-height: min(1120px, calc(100vh - 3rem));
+  margin: 0 auto 4rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+.cover-banner { display: block; width: 100%; height: auto; }
+.cover-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(2rem, 6vw, 4.5rem);
+  text-align: center;
+}
+.cover-logo { width: min(520px, 85%); height: auto; margin-bottom: auto; }
+.cover-title { margin: 3rem 0 .5rem; color: #071b50; font-size: clamp(3rem, 8vw, 5rem); font-weight: 700; line-height: 1; }
+.cover-subtitle { margin: 0; color: #287a91; font-size: clamp(1.5rem, 4vw, 2.25rem); font-weight: 600; line-height: 1.25; }
+.cover-people {
+  width: min(560px, 100%);
+  margin-top: auto;
+  padding-top: 2rem;
+  border-top: 2px solid #66c7ee;
+  text-align: left;
+}
+.cover-people p { margin: .35rem 0; }
+#TOC a { color: inherit; text-decoration: none; }
+#TOC > ul > li > a { font-weight: 600; }
+#TOC li { margin-bottom: .3rem; }
+#TOC a:hover { text-decoration: underline; }
+body { line-height: 1.65; }
+h1 { margin-top: 2.5rem; }
+figure { margin: 1.5rem 0; }
+details { margin: 1rem 0 1.5rem; padding: .6rem .9rem; border: 1px solid #d8dfe5; border-radius: .3rem; }
+summary { cursor: pointer; font-weight: 600; }
+details[open] > summary { margin-bottom: .75rem; }
+summary:focus-visible { outline: 2px solid #287a91; outline-offset: 4px; }
+@media screen and (min-width: 768px) {
+  #quarto-content.page-layout-full #quarto-document-content {
+    grid-column: screen-start / screen-end !important;
+    width: min(1100px, calc(100vw - 3rem)) !important;
+    max-width: 1100px !important;
+    margin-inline: auto !important;
+  }
+}
+@media print {
+  @page { size: A4; margin: 18mm; }
+  body { font-size: 10.5pt; line-height: 1.45; }
+  #quarto-content { display: block !important; }
+  main { width: 100% !important; max-width: none !important; }
+  .cover-page {
+    width: 100%;
+    max-width: none;
+    height: 245mm;
+    min-height: 0;
+    margin: 0;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    break-after: page;
+    page-break-after: always;
+  }
+  .cover-content { padding: 14mm 12mm 10mm; }
+  .cover-logo { width: 125mm; }
+  .cover-title { break-before: auto !important; margin-top: 18mm; font-size: 34pt; }
+  .cover-subtitle { font-size: 20pt; }
+  h1 { break-before: page; margin-top: 0; }
+  h2, h3 { break-after: avoid; }
+  pre, figure, tr, .callout { break-inside: avoid; }
+  p { orphans: 3; widows: 3; }
+  .code-copy-button, .anchorjs-link { display: none !important; }
+  a { color: inherit; text-decoration: none; }
+}
+</style>
+
+<div class="cover-page">
+<img class="cover-banner" src="../../banner.png" alt="Mrežni sustavi">
+<div class="cover-content">
+<img class="cover-logo" src="../../fipu_hr.png" alt="Fakultet informatike u Puli">
+<div class="cover-title">Vježba 0</div>
+<div class="cover-subtitle">Osnove računalnih mreža 
+
+i priprema radnog okruženja</div>
+<div class="cover-people">
+<p><strong>Predavanja:</strong> doc. dr. sc. Sandi Baressi Šegota</p>
+<p><strong>Vježbe:</strong> Elvis Starić mag. inf.</p>
+</div>
+</div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const naslovnica = document.querySelector(".cover-page");
+  const sadrzaj = document.getElementById("TOC");
+  if (naslovnica && sadrzaj) sadrzaj.before(naslovnica);
+});
+</script>
+
+Kada otvorimo web-stranicu, pošaljemo poruku ili dohvatimo datoteku s drugog računala, koristimo sustav koji povezuje uređaje i omogućuje prijenos podataka između njih. Korisniku je često dovoljan jedan klik, ali iza njega sudjeluju programi, mrežne veze i uređaji koji zajednički omogućuju komunikaciju. Razumijevanje njihova rada važno je i pri razvoju aplikacija i pri održavanju sustava na kojima se te aplikacije izvršavaju.
+
+To postaje posebno vidljivo kada nešto ne radi kako očekujemo. Sporo učitavanje stranice može biti povezano s mrežnim prijenosom ili radom samog poslužitelja. Nedostupna datoteka može biti posljedica prekinute veze, pogrešnih postavki ili nedostupne usluge. Osim omogućavanja prijenosa, treba voditi računa i o zaštiti podataka te o tome tko smije pristupiti određenim resursima. Za rješavanje takvih problema potrebno je razumjeti cijeli put komunikacije.
+
+Kolegij **Mrežni sustavi** povezuje način prijenosa podataka, organizaciju mreža, rad mrežnih usluga i zaštitu komunikacije. Na vježbama ćemo te teme primjenjivati kroz izgradnju i konfiguraciju mreža, promatranje prometa i otklanjanje pogrešaka. Rezultat provjere povezat ćemo s postavkama i ponašanjem uređaja kako bismo mogli objasniti zašto komunikacija uspijeva ili gdje nastaje problem.
+
+Na ovoj vježbi proći ćemo osnovne pojmove potrebne za čitanje mrežne sheme, a zatim instalirati GNS3 i provjeriti možemo li u njemu pokrenuti virtualni uređaj. Primjere i zadatke pratit ćemo na jednostavnoj mreži učionice. Na kraju skripte nalaze se zadaci za samostalnu vježbu i njihova rješenja.
+
+# Osnovni pojmovi računalnih mreža
+
+## Računalna mreža i mrežna usluga
+
+U učionici se nalazi nekoliko računala i mrežni pisač. Student želi ispisati dokument koji je pohranjen na njegovu računalu. Kako bi to mogao napraviti, računalo mora poslati podatke pisaču, a pisač ih mora primiti i obraditi. Povezivanje uređaja omogućuje takvu razmjenu.
+
+Povezana računala i pisač zajedno čine **računalnu mrežu**. Ona omogućuje prijenos podataka među uređajima. Istu mrežu možemo koristiti za različite poslove: ispis, dohvat datoteke s drugog računala ili pristup web-sadržaju.
+
+Ispis koji pisač omogućuje drugim uređajima primjer je **mrežne usluge**. Mreža omogućuje prijenos dokumenta, a usluga određuje što odredište s njim radi. Uređaj zato može biti povezan s mrežom, a da njegova usluga trenutačno nije dostupna. Primjerice, pisač može primiti dokument, ali čekati papir prije ispisa.
+
+::: {.callout-tip title="Računalna mreža i mrežna usluga"}
+**Računalna mreža** je sustav međusobno povezanih uređaja koji razmjenjuju podatke prema dogovorenim pravilima.
+
+**Mrežna usluga** je funkcija koju program ili uređaj pruža drugim sudionicima preko mreže, primjerice dijeljenje datoteka, ispis ili dohvat web-sadržaja.
+:::
+
+Promotrimo sada studenta koji želi otvoriti stranicu fakulteta. Na svojem računalu pokreće web-preglednik i odabire stranicu. Preglednik treba dohvatiti sadržaj s računala na kojem je stranica dostupna. Na tom računalu radi program koji prima zahtjeve za web-sadržajem i odgovara na njih.
+
+U toj razmjeni **preglednik je klijent**, a **program koji daje pristup web-sadržaju je poslužitelj**. Njihove uloge možemo pratiti kroz jednostavan slijed:
+
+| Korak | Što se događa? |
+|---|---|
+| 1. Zahtjev | Preglednik traži određeni sadržaj od poslužiteljskog programa |
+| 2. Obrada | Poslužiteljski program prima zahtjev i provjerava može li ga ispuniti |
+| 3. Odgovor | Poslužitelj šalje traženi sadržaj ili obavijest o problemu, primjerice da sadržaj nije pronađen |
+| 4. Prikaz | Preglednik prima odgovor i prikazuje sadržaj ili poruku korisniku |
+
+Student pokreće radnju, ali mrežni zahtjev šalje njegov program - preglednik. Poslužiteljski program spreman je primati zahtjeve i može pružati istu uslugu većem broju klijenata. Primjerice, više studenata može svojim preglednicima pristupati istom web-poslužitelju.
+
+::: {.callout-tip title="Klijent i poslužitelj"}
+**Klijent** je uređaj ili program koji koristi uslugu poslužitelja. Šalje zahtjev za podacima ili izvršavanjem određene radnje te prima odgovor. Primjerice, pri otvaranju web-stranice klijentska strana traži njezin sadržaj.
+
+**Poslužitelj** je uređaj ili program koji pruža uslugu klijentima. Prima njihove zahtjeve, obrađuje ih i šalje odgovore, primjerice traženu web-stranicu, datoteku ili obavijest o pogrešci. Istu uslugu može pružati većem broju klijenata.
+
+:::
+
+Uloge ovise o usluzi koju promatramo. Isto računalo može preglednikom koristiti web-uslugu kao klijent, a drugim programom pružati zajedničku mapu kao poslužitelj. Klijent i poslužitelj mogu se nalaziti u istoj lokalnoj mreži, njihovi nazivi ne znače da komunikacija mora prolaziti Internetom.
+
+## Veza, mrežno sučelje i protokol
+
+Za prijenos podataka uređaji trebaju komunikacijsku vezu. Uređaj se na nju priključuje preko **mrežnog sučelja**, a podaci se prenose signalima preko određenog **prijenosnog medija**.
+
+Mrežna sučelja mogu biti Ethernet, Wi-Fi ili virtualna. Razlikuju se prema načinu na koji ostvaruju mrežnu komunikaciju.
+
+Ethernet sučelje omogućuje priključivanje na Ethernet mrežu, najčešće kabelom. 
+
+Wi-Fi sučelje omogućuje bežičnu komunikaciju radijskim signalima. Laptop može imati oba sučelja, ali jedno od njih može biti isključeno ili nepovezano. Prisutnost sučelja u postavkama zato ne znači da se ono trenutačno koristi.
+
+Virtualno sučelje ostvareno je programski. Susrest ćemo ga pri radu s virtualnim uređajima: ne mora imati zaseban priključak na kućištu računala, iako za prijenos izvan fizičkog računala u konačnici koristi fizičku mrežnu vezu.
+
+::: {.callout-tip title="Mrežno sučelje i prijenosni medij"}
+**Mrežno sučelje** je fizička ili virtualna komponenta uređaja preko koje se šalju i primaju mrežni podaci.
+
+**Prijenosni medij** je fizičko sredstvo kojim se signal prenosi, primjerice bakreni kabel, optičko vlakno ili prostor kojim se šire radijski valovi.
+:::
+
+Veza omogućuje prijenos, a **protokol** određuje pravila razmjene podataka. U primjeru ispisa računalo i pisač trebaju se uskladiti o tome kako izgleda zahtjev za ispis, kako se označava dokument i kako se javlja rezultat.
+
+Primjerice, poruka „dokument je zaprimljen” potvrđuje primitak dokumenta, dok „ispis je dovršen” označava završetak posla. Ako pisač čeka papir, može poslati prvu poruku, a drugu tek nakon ispisa. Sudionici moraju jednako tumačiti značenje poruka. HTTP je primjer protokola za razmjenu web-sadržaja, njegove zahtjeve i odgovore obradit ćemo u vježbi o mrežnim uslugama.
+
+::: {.callout-tip title="Mrežni protokol"}
+**Mrežni protokol** skup je pravila koja određuju oblik i značenje poruka te način njihove razmjene između sudionika komunikacije.
+:::
+
+## Krajnji i posrednički uređaji
+
+U primjeru ispisa računalo šalje dokument, a pisač je njegovo krajnje odredište. Ta dva sudionika promatramo kao **krajnje uređaje**. Između njih se mogu nalaziti **posrednički uređaji**, koji prosljeđuju podatke na putu od računala do pisača.
+
+ - **Preklopnik** (*switch*) povezuje uređaje u lokalnoj Ethernet mreži. Ako računalo i pisač pripadaju istoj lokalnoj mreži i priključeni su na preklopnik, podaci između njih prolaze preko njega. Preklopnik obavlja lokalno prosljeđivanje (ne izvršava posao ispisa).
+
+ - **Usmjernik** (*router*) povezuje različite IP mreže i prosljeđuje podatkovne pakete prema odredišnoj mreži. Koristi se, primjerice, za prijelaz iz mreže učionice prema drugim mrežama. IP je protokol koji omogućuje adresiranje i prijenos podataka između mreža (detalje o adresiranju na vježbi 4).
+
+ - **Bežična pristupna točka** (*access point*) omogućuje Wi-Fi uređajima pristup mreži. U uobičajenoj izvedbi povezuje bežične uređaje sa žičanim dijelom lokalne mreže.
+
+::: {.callout-tip title="Uloge mrežnih uređaja"}
+**Krajnji uređaj** je izvor ili odredište podataka promatrane komunikacije. Primjeri su računalo, telefon, mrežni pisač i poslužiteljsko računalo.
+
+**Posrednički uređaj** prima i prosljeđuje promet između drugih sudionika komunikacije. Primjeri su preklopnik, usmjernik i bežična pristupna točka.
+:::
+
+::: {.callout-caution title="Kućni ruter - više funkcija u jednom uređaju"}
+Kućni uređaj koji zovemo „ruter” često u istom kućištu objedinjuje usmjernik, preklopnik i pristupnu točku.
+:::
+
+Poslužiteljsko računalo pripada krajnjim uređajima kada pruža uslugu, primjerice šalje web-stranicu. Njegovu ulogu razlikujemo od uloge uređaja koji samo prosljeđuje podatke na putu do njega.
+
+## Lokalna mreža, Internet i topologija
+
+Računala i pisač u učionici možemo povezati unutar iste zgrade. Takvu mrežu ograničenog područja nazivamo **lokalnom mrežom**, odnosno **LAN-om** (*Local Area Network*). Ona može uključivati i računala spojena kabelom i uređaje povezane preko Wi-Fi veze.
+
+Ako iz učionice želimo pristupiti udaljenom poslužitelju, podatke treba prenijeti preko drugih mreža. **Internet** povezuje mreže različitih ustanova, pružatelja pristupa i drugih organizacija u globalni sustav. Lokalni ispis ne treba taj udaljeni put, pa može raditi i kada je veza prema Internetu prekinuta.
+
+Preko Interneta koristimo različite usluge. **Web** nam omogućuje dohvat sadržaja pomoću preglednika i web-poslužitelja. Web-poslužitelj može se nalaziti i u lokalnoj mreži, pa web-stranica ne mora biti javno dostupna na Internetu.
+
+::: {.callout-tip title="Lokalna mreža, Internet i web"}
+**Lokalna mreža (LAN)** povezuje uređaje unutar ograničenog područja, primjerice učionice, ureda ili zgrade.
+
+**Internet** je globalni sustav međusobno povezanih računalnih mreža.
+
+**Web** je mrežna usluga koja omogućuje pristup i razmjenu sadržaja putem web-poslužitelja
+:::
+
+Pogledajmo pojednostavljenu shemu učionice. U ovom primjeru računala i pisač pripadaju istoj lokalnoj IP mreži.
+
+![Pojednostavljena mreža učionice.](Slike/mreza-ucionice.svg){fig-alt="Računala PC1 i PC2 te mrežni pisač zasebnim su Ethernet vezama povezani s preklopnikom SW1. SW1 je povezan s usmjernikom R1, koji ima vezu prema drugim mrežama."}
+
+Linije prikazuju veze između uređaja. Za ispis s `PC1` put je `PC1 → SW1 → pisač`. Za pristup odredištu u drugoj mreži početak puta je `PC1 → SW1 → R1`. Veza prema drugim mrežama nije potrebna za opisani lokalni ispis.
+
+Na shemi svaki uređaj promatramo kao **čvor**, a linije pokazuju njegove veze s drugim uređajima. Četiri uređaja možemo spojiti preko središnjeg uređaja, priključiti na zajednički vod ili povezati izravnim vezama. Takve načine povezivanja nazivamo **mrežnim topologijama**. Promjenom veza mijenjaju se mogući putevi podataka i posljedice prekida pojedine veze.
+
+::: {.callout-tip title="Mrežna topologija"}
+**Mrežna topologija** opisuje način međusobnog povezivanja mrežnih čvorova i njihovih veza. 
+
+**Čvor** je uređaj ili točka povezivanja u mrežnom prikazu.
+:::
+
+- **Zvijezda:** svaki je uređaj zasebnom vezom povezan sa središnjim uređajem, primjerice preklopnikom. Komunikacija između priključenih uređaja prolazi kroz središte.
+- **Sabirnica:** više uređaja priključeno je na zajednički prijenosni vod. Dijele isti medij, pa treba odrediti kada koji uređaj smije slati podatke. Primjer su starije izvedbe Etherneta s koaksijalnim kabelom.
+- **Prsten:** čvorovi su povezani u zatvoreni slijed i svaki ima dva susjeda. Prijenos prema udaljenijem čvoru prolazi preko međučvorova. Ponašanje pri prekidu ovisi o tehnologiji i postojanju zaštitnih mehanizama.
+- **Mrežasta topologija** (*mesh*): čvorovi imaju više međusobnih veza. U potpuno mrežastoj topologiji svaki je par čvorova izravno povezan, dok u djelomično mrežastoj postoje samo neke od tih veza. Dodatne veze mogu omogućiti alternativne putove, uz odgovarajuće protokole i konfiguraciju.
+
+![Skice zvijezde, sabirnice, prstena i potpuno mrežaste topologije.](Slike/topologije.svg){fig-alt="Zvijezda ima četiri krajnja uređaja A–D spojena s preklopnikom SW. Sabirnica četiri uređaja na zajedničkom vodu. Prsten četiri čvora u zatvorenom slijedu. Potpuno mrežasta topologija četiri čvora i šest veza između svih parova."}
+
+Na skicama kružići predstavljaju čvorove, a linije njihove veze. Dijagonalne linije u skici potpuno mrežaste topologije sijeku se u sredini, ali na tom mjestu nema dodatnog čvora. Prikazujemo osnovne oblike, veće mreže često ih kombiniraju. Detaljniju usporedbu napravit ćemo uz Ethernet i lokalne mreže.
+
+Na shemi su računala i pisač raspoređeni u zvijezdu oko preklopnika. Ako se prekine kabel `PC1`, njegovo povezivanje prestaje raditi, dok `PC2` i pisač mogu nastaviti komunicirati. Isključivanje jedinog preklopnika prekida komunikaciju preko njega za sve priključene uređaje. Pri čitanju topologije zato pratimo veze i uloge uređaja, a ne položaj ikona na crtežu.
+
+::: {.callout-note title="Zadatak"}
+Koristeći shemu učionice odgovorite na pitanja:
+
+1. Koji su uređaji krajnji, a koji posrednički? Koja je uloga `SW1`, a koja `R1`?
+2. Napišite put dokumenta od `PC2` do lokalnog pisača. Prolazi li dokument kroz `R1`?
+3. Koja komunikacija ostaje moguća ako se prekine kabel između `PC1` i `SW1`? Što se mijenja ako se isključi `SW1`?
+4. Laptop je na ovu mrežu povezan bakrenim Ethernet kabelom, a njegov je Wi-Fi isključen. Koje sučelje koristi i koji je prijenosni medij?
+:::
+
+<details>
+<summary>Prikaži rješenje i objašnjenje</summary>
+
+1. `PC1`, `PC2` i pisač krajnji su uređaji. `SW1` i `R1` posrednički su uređaji. `SW1` omogućuje lokalno prosljeđivanje, a `R1` prijelaz prema drugim IP mrežama.
+2. Put je `PC2 → SW1 → pisač`. U zadanoj mreži dokument ne mora proći usmjernikom jer su računalo i pisač u istoj lokalnoj IP mreži.
+3. Nakon prekida kabela `PC1` može nastaviti komunikacija između `PC2` i pisača te njihov pristup drugim mrežama preko `SW1` i `R1`, ako je ostatak puta ispravan. Nakon isključivanja `SW1` prekidaju se svi putevi preko njega.
+4. Koristi Ethernet sučelje, a medij je bakreni kabel. Wi-Fi sučelje može biti prikazano u postavkama iako se ne koristi.
+
+</details>
+
+# Slojeviti modeli mrežne komunikacije
+
+## Svrha podjele na slojeve
+
+Pri dohvatu web-stranice program mora oblikovati zahtjev, mreža mora omogućiti dolazak do odredišta, a mrežno sučelje mora prenijeti podatke preko veze. To su različiti dijelovi istog postupka. Preglednik ne treba sam određivati kako električnim signalom prenijeti svaki bit, kao što preklopnik ne treba razumjeti sadržaj stranice koju korisnik otvara.
+
+Zbog toga komunikacijske funkcije organiziramo u **slojeve**. Svaki sloj obavlja dio posla, koristi funkcije sloja ispod sebe i omogućuje rad sloju iznad sebe. Tako program može koristiti postojeće mrežne funkcije i kada se način povezivanja promijeni, primjerice s Ethernet kabela na Wi-Fi.
+
+Takav opis podjele komunikacijskih funkcija nazivamo **slojevitim modelom**.
+
+::: {.callout-tip title="Sloj i slojeviti model"}
+**Sloj** je skup povezanih funkcija mrežne komunikacije koje imaju određenu ulogu u prijenosu podataka.
+
+**Slojeviti model** opisuje podjelu tih funkcija i njihove međusobne odnose.
+:::
+
+Na predavanjima i u ovim vježbama kao glavni prikaz koristimo **petoslojni internetski model**. Usporedit ćemo ga i s OSI modelom, koji iste komunikacijske funkcije raspoređuje u sedam slojeva. Slojevi nisu zasebni uređaji koje trebamo dodati u mrežu. Jedno računalo ostvaruje funkcije više slojeva svojim hardverom, operacijskim sustavom i programima. Topologija nam pokazuje **što je povezano s čime**, a model slojeva **koji se komunikacijski poslovi obavljaju**.
+
+## Petoslojni internetski model
+
+Pri otvaranju stranice najprije nas zanima zahtjev preglednika, zatim njegova dostava drugom programu, put do odredišne mreže, prijenos preko pojedine lokalne veze i konačno signal koji nosi bitove. Petoslojni model razdvaja upravo tih pet poslova. Tablicu prikazujemo s aplikacijskim slojem na vrhu i fizičkim na dnu.
+
+::: {.callout-caution title="Internetski model - pet slojeva"}
+| Sloj | Osnovna uloga | Primjer |
+|---|---|---|
+| 5. Aplikacijski | Pravila mrežne usluge i razmjena poruka između aplikacija | HTTP, DNS, SMTP |
+| 4. Transportni | Komunikacija između aplikacijskih procesa na krajnjim uređajima | TCP, UDP |
+| 3. Mrežni | IP adresiranje i prijenos paketa između mreža | IP, usmjernik |
+| 2. Podatkovne veze | Prijenos okvira preko pojedine veze između susjednih uređaja | Ethernet, Wi-Fi |
+| 1. Fizički | Prijenos bitova signalima kroz medij | Električni, optički i radijski signal |
+:::
+
+**Aplikacijski sloj** opisuje pravila mrežne usluge koju program koristi ili pruža. Pri dohvatu web-stranice HTTP određuje kako preglednik traži sadržaj i kako poslužitelj odgovara, uključujući obavijest da sadržaj nije pronađen. Druge usluge, poput razmjene pošte ili datoteka, imaju svoja pravila komunikacije. Aplikacijski sloj obuhvaća te mrežne funkcije, dok crtanje prozora preglednika ili promjena boje gumba pripadaju ostalim funkcijama korisničkog programa.
+
+**Transportni sloj** omogućuje komunikaciju između programa koji se izvršavaju na krajnjim uređajima. Na računalu istodobno mogu raditi preglednik i drugi mrežni programi, pa podatke treba povezati s odgovarajućom komunikacijom. TCP i UDP primjeri su transportnih protokola. TCP, među ostalim, omogućuje pouzdan prijenos i očuvanje redoslijeda podataka, dok UDP ne pruža takvu potvrdu isporuke. Njihov rad razradit ćemo u vježbi o transportnim protokolima.
+
+**Mrežni sloj** omogućuje adresiranje i usmjeravanje, uključujući prijelaz između mreža. IP je primjer protokola tog sloja, a njegova prijenosna jedinica naziva se **paket**. Kada računalo pristupa odredištu u drugoj mreži, usmjernik obrađuje odredišnu IP adresu i bira put prema toj mreži. Okvir i IP paket zato nisu dva naziva za istu jedinicu: okvir na lokalnoj vezi može nositi IP paket.
+
+**Sloj podatkovne veze** organizira prijenos preko lokalne veze. Podatke grupira u jedinice koje nazivamo **okvirima**. Ethernet okvir sadrži preneseni sadržaj i informacije potrebne za lokalni prijenos. Preklopnik prosljeđuje takve okvire između svojih priključaka. Razlika u odnosu na fizički sloj jest da sada promatramo organizirane jedinice podataka, a ne samo prijenos signala.
+
+**Fizički sloj** bavi se prijenosom bitova preko medija. Bit ima vrijednost 0 ili 1, a na stvarnoj se vezi te vrijednosti predstavljaju signalima. Ovisno o tehnologiji koriste se električki, optički ili radijski signali. Kabel, primjerice, omogućuje fizički prijenos, ali ne određuje koju je web-stranicu korisnik zatražio.
+
+## Usporedba s OSI i četveroslojnim TCP/IP prikazom
+
+**OSI** (*Open Systems Interconnection*) referentni model opisuje sedam slojeva. Donja četiri imaju odgovarajuće funkcije kao donja četiri sloja internetskog modela. Razlika je u gornjem dijelu: OSI zasebno prikazuje aplikacijski, prezentacijski i sesijski sloj, dok ih internetski model okuplja u aplikacijskom sloju.
+
+::: {.callout-caution title="OSI model i odnos prema internetskom modelu"}
+| OSI sloj | Osnovna uloga | Sloj petoslojnog internetskog modela |
+|---|---|---|
+| 7. Aplikacijski | Pravila mrežnih usluga | Aplikacijski |
+| 6. Prezentacijski | Oblik i prikaz podataka, kodiranje ili kompresija | Aplikacijski |
+| 5. Sesijski | Uspostavljanje, upravljanje i završavanje komunikacijskih sesija | Aplikacijski |
+| 4. Transportni | Komunikacija između aplikacijskih procesa | Transportni |
+| 3. Mrežni | Logičko adresiranje i usmjeravanje između mreža | Mrežni |
+| 2. Podatkovne veze | Organizacija prijenosa okvira preko pojedine veze | Podatkovne veze |
+| 1. Fizički | Prijenos bitova signalima kroz medij | Fizički |
+:::
+
+**Sesijski sloj** opisuje uspostavljanje, upravljanje i završetak dijaloga između sudionika. Povezanu razmjenu između dviju strana promatramo kao **sesiju**. Tijekom takve razmjene može trebati uskladiti tko smije slati u određenom trenutku i kako se označava završetak dijaloga. Primjer funkcije tog sloja jest dogovor da jedna strana završi svoj dio razmjene prije nego što druga nastavi. Naglasak je na organizaciji razgovora između programa, uz prijenos podataka koji omogućuju niži slojevi.
+
+**Prezentacijski sloj** odnosi se na način zapisivanja i predstavljanja podataka. Nije dovoljno prenijeti isti niz bitova ako ga sudionici tumače različito. Primjerice, za ispravan prikaz teksta trebaju koristiti usklađeno kodiranje znakova. Ako se podaci komprimiraju prije prijenosa, primatelj mora znati kako ih vratiti u izvorni oblik. Ovaj sloj zato opisuje pretvorbe potrebne da sadržaj koji je jedna strana pripremila druga može ispravno protumačiti.
+
+OSI model pomaže razlikovati odgovornosti. Ne zahtijeva da u operacijskom sustavu za svaki sloj pronađemo zaseban program. Funkcije njegovih gornjih slojeva u stvarnim aplikacijama često se ostvaruju zajedno.
+
+**TCP/IP** naziv je skupa protokola na kojem se temelji internetska komunikacija. Obuhvaća i druge protokole osim TCP-a i IP-a, primjerice UDP. U literaturi se koristi i **četveroslojni TCP/IP prikaz**, u kojem su fizički sloj i sloj podatkovne veze objedinjeni u sloj pristupa mreži. To je drukčije grupiranje funkcija. Za zadatke i daljnje vježbe koristimo pet slojeva kao na predavanjima, osim kada se izričito traži usporedba modela.
+
+## Primjer: dohvat web-stranice
+
+Vratimo se računalu koje dohvaća stranicu s poslužitelja u drugoj mreži. Za primjer pretpostavimo da komunikacija koristi TCP. Na računalu koje šalje zahtjev možemo pratiti sljedeće funkcije:
+
+1. **Aplikacijska komunikacija:** preglednik oblikuje HTTP zahtjev za željenim sadržajem.
+2. **Transport:** TCP omogućuje prijenos podataka te komunikacije do druge strane.
+3. **Mrežni prijenos:** IP koristi adrese potrebne za prijenos prema odredištu, a usmjernici biraju putove između mreža.
+4. **Sloj podatkovne veze:** podaci se za pojedinu Ethernet vezu organiziraju u okvire.
+5. **Fizički sloj:** bitovi okvira predstavljaju se signalima koji se prenose kroz kabel.
+
+Pri slanju se funkcije koriste od viših prema nižim slojevima. Na odredištu se primljeni sadržaj obrađuje prema višim slojevima kako bi web-poslužitelj mogao protumačiti zahtjev. Njegov odgovor zatim prolazi odgovarajući postupak u povratnom smjeru.
+
+Na tom putu sadržaju zahtjeva dodaju se upravljački podaci. TCP dodaje svoje zaglavlje, IP dodaje podatke potrebne za mrežni prijenos, a Ethernet priprema okvir za lokalnu vezu. Viša jedinica podataka tako postaje sadržaj jedinice nižeg sloja: HTTP poruka prenosi se unutar TCP segmenta, segment unutar IP paketa, a paket unutar Ethernet okvira. To nazivamo **enkapsulacijom**. Ne radi se o četiri neovisne kopije zahtjeva, nego o dodavanju informacija potrebnih za različite dijelove njegova prijenosa. Na odredištu se sadržaj predaje prema višim slojevima uz obradu tih informacija. Taj obrnuti postupak nazivamo **dekapsulacijom**.
+
+::: {.callout-tip title="Enkapsulacija"}
+**Enkapsulacija** je postupak u kojem sloj preuzima podatke višeg sloja i dodaje informacije potrebne za vlastiti dio komunikacije, primjerice zaglavlje. Tako nastaju jedinice podataka koje se prenose prema nižim slojevima.
+:::
+
+Zasad pratimo odnos poruke, segmenta, paketa i okvira. Njihova konkretna polja promatrat ćemo u vježbama o aplikacijama, transportu, IP-u i Ethernetu.
+
+U ovom primjeru ispravan kabel omogućuje jedan dio puta. Sam po sebi ne potvrđuje da postoji mrežni put do udaljenog poslužitelja, da je njegov program pokrenut ili da tražena stranica postoji. Podjela na slojeve pomaže nam razlikovati te probleme i odabrati što trebamo provjeriti.
+
+::: {.callout-note title="Zadatak"}
+Pridružite svakom opisu sloj petoslojnog internetskog modela:
+
+1. Optičkim vlaknom prenosi se svjetlosni signal.
+2. Preklopnik prosljeđuje okvire između priključenih uređaja u lokalnoj mreži.
+3. Usmjernik odabire put prema odredišnoj mreži.
+4. Web-poslužitelj obrađuje zahtjev za stranicom.
+5. TCP omogućuje prijenos podataka između programa.
+
+Kako se u navedenom modelu razlikuju fizički sloj i sloj podatkovne veze? 
+:::
+
+<details>
+<summary>Prikaži rješenje i objašnjenje</summary>
+
+1. Fizički sloj.
+2. Sloj podatkovne veze.
+3. Mrežni sloj.
+4. Aplikacijski sloj.
+5. Transportni sloj.
+
+Fizički sloj prenosi bitove signalima, a sloj podatkovne veze organizira ih u okvire i uređuje prijenos preko pojedine veze. U petoslojnom modelu promatramo ih zasebno.
+
+</details>
+
+# Instalacija i provjera GNS3 okruženja
+
+## GNS3, projekt i virtualni uređaj
+
+GNS3 omogućuje izgradnju i pokretanje mrežnih topologija na računalu. U radni prostor dodajemo uređaje, povezujemo ih i pratimo njihovo ponašanje. Ovisno o vrsti čvora GNS3 koristi simulator ili pokreće stvarni operacijski sustav uređaja.
+
+Rad u GNS3-u počinje izradom **projekta**, u kojem čuvamo prikaz mreže i podatke potrebne za njegovo ponovno otvaranje. Kada u projekt dodamo virtualno računalo, ono se prikazuje kao **čvor**. Za unos naredbi na tom računalu otvaramo njegovu **konzolu**: u njoj možemo, primjerice, zatražiti prikaz njegovih mrežnih postavki.
+
+::: {.callout-tip title="Projekt, čvor i konzola"}
+**Projekt** okuplja topologiju i pripadajuće datoteke laboratorijskog rada.
+
+**Čvor** predstavlja uređaj u projektu, primjerice virtualno računalo ili preklopnik.
+
+**Konzola** omogućuje rad s odabranim uređajem unosom naredbi.
+:::
+
+Za provjeru instalacije koristit ćemo **VPCS** (*Virtual PC Simulator*), jednostavan simulator računala s osnovnim mrežnim naredbama. Nije potpuno Windows ili Linux računalo: služi za provjere mrežne komunikacije, a ne za pokretanje preglednika ili drugih korisničkih programa. Za njegovo dodavanje nije potrebna zasebna slika operacijskog sustava usmjernika.
+
+GNS3 ima grafičko sučelje u kojem uređujemo projekt i **poslužitelj** koji pokreće čvorove. Lokalni poslužitelj radi na istom računalu kao grafičko sučelje. Moguće je koristiti i poslužitelj na drugom računalu ili u posebnom virtualnom stroju, GNS3 VM-u. Za početnu provjeru VPCS-a koristimo lokalni poslužitelj.
+
+## Preuzimanje i instalacija
+
+### Windows
+
+1. Otvorite [službenu stranicu GNS3-a](https://www.gns3.com/) i registrirajte besplatan korisnički račun. Ako već imate račun, prijavite se.
+2. Nakon prijave preuzmite instalacijski paket za **Windows**.
+3. Pokrenite preuzeti instalacijski program. Ako sustav zatraži ovlasti za instalaciju, potvrdite ih.
+4. U odabiru komponenti zadržite GNS3, lokalni poslužitelj i VPCS. Uključite i ponuđeni program za otvaranje konzole uređaja.
+5. Dovršite instalaciju. Ako se otvori dodatni instalacijski prozor za odabranu komponentu, dovršite i njega.
+6. Pokrenite GNS3 iz izbornika Start.
+
+**Detaljne upute dostupne su na** [službenim uputama za Windows](https://docs.gns3.com/docs/getting-started/installation/windows).
+
+### macOS
+
+Prije instalacije otvorite **Appleov izbornik → About This Mac / O ovom Macu**. Oznaka **Chip / Čip**, primjerice Apple M1, M2 ili M3, označava Apple Silicon računalo. Ako je naveden Intelov procesor, Rosetta vam nije potrebna.
+
+1. Otvorite [službenu stranicu GNS3-a](https://www.gns3.com/) i registrirajte besplatan korisnički račun. Ako već imate račun, prijavite se.
+2. Nakon prijave preuzmite instalacijski paket za **macOS**.
+3. Otvorite preuzetu `.dmg` datoteku i povucite GNS3 u mapu **Applications / Aplikacije**.
+4. Na Apple Silicon računalu instalirajte Rosettu i postavite GNS3 da se otvara koristeći Rosettu prema uputama u nastavku.
+5. Pokrenite GNS3 iz mape Aplikacije. Ako sustav traži potvrdu za pokretanje preuzete aplikacije, odobrite pokretanje kroz prikazani dijalog ili postavke **Privacy & Security / Privatnost i sigurnost** za tu aplikaciju.
+6. Pri prvom pokretanju pojavit će se upit kojim **uBridge** traži **root ovlasti** za rad s mrežnim sučeljima. Odaberite **Yes** kako biste odobrili potrebne ovlasti. Ako macOS zatim zatraži administratorsku lozinku, unesite je i potvrdite.
+
+   ![Upit za dodjelu root ovlasti uBridgeu — odaberite Yes.](Slike/uBridge.png){width=600 fig-align="center"}
+
+7. Dovršite početno postavljanje ponuđenih komponenti.
+
+**Rosetta na Apple Silicon računalu**
+
+Rosetta omogućuje pokretanje aplikacija izrađenih za Intelove Macove na Macovima s Apple Silicon procesorom. Radi u pozadini nakon instalacije. Ako pri pokretanju GNS3-a macOS ponudi instalaciju Rosette, odaberite **Install / Instaliraj** i slijedite upute.
+
+Ako se taj dijalog ne pojavi, Rosettu možete instalirati kroz Terminal uz pomoć naredbe:
+
+```bash
+softwareupdate --install-rosetta
+```
+
+Nakon završetka instalacije postavite GNS3 da se otvara koristeći Rosettu:
+
+1. Zatvorite GNS3 ako je pokrenut.
+2. U Finderu otvorite mapu **Applications / Aplikacije**.
+3. Desnom tipkom kliknite aplikaciju **GNS3** i odaberite **Get Info / Učitaj informacije**.
+4. Označite **Open using Rosetta / Otvori koristeći Rosettu**, kao na slici.
+5. Zatvorite prozor s informacijama i ponovno pokrenite GNS3.
+
+![Uključivanje opcije „Otvori koristeći Rosettu” u informacijama o aplikaciji GNS3.](Slike/otvori_koristeci_rosettu.png){width=450 fig-align="center"}
+
+Na prikazanom je primjeru GNS3 označen kao univerzalna aplikacija, a navedena opcija odabire pokretanje njezina Intelova dijela. Ako koristite isključivo Intelovo izdanje, ta opcija može izostati jer se ono na Apple Silicon računalu automatski pokreće kroz Rosettu.
+
+Za ovu naredbu koristi se obični macOS Terminal, nije potrebno instalirati poseban terminal niti uključivati opciju **Open using Rosetta** za Terminal. Naredbu unosimo na vlastitom Macu, a ne u konzoli VPCS-a.
+
+Rosetta omogućuje izvođenje Intelovih macOS aplikacija, ali time nije automatski riješena kompatibilnost svih virtualnih uređaja ili GNS3 VM-a. Ovdje provjeravamo lokalno pokretanje VPCS-a.
+
+**Detaljne upute dostupne su na** [službenim uputama za macOS](https://docs.gns3.com/docs/getting-started/installation/mac).
+
+### Linux
+
+GNS3 se na Linuxu instalira prema distribuciji. U [službenim uputama za Linux](https://docs.gns3.com/docs/getting-started/installation/linux) odaberite odjeljak za svoju distribuciju i slijedite postupak za **grafičko sučelje i poslužitelj**. Provjerite da je instaliran i **VPCS**.
+
+Naredbe za Ubuntu ne prepisujte na distribuciju koja koristi drugi sustav paketa. Ako instalacija traži promjenu korisničkih ovlasti za pomoćne komponente, slijedite upute i ponovno se prijavite kada je to navedeno. Nakon instalacije pokrenite GNS3 iz izbornika aplikacija ili naredbom `gns3` u terminalu.
+
+## Odabir lokalnog poslužitelja
+
+Pri prvom pokretanju može se otvoriti čarobnjak za postavljanje, **Setup Wizard**. Ako se nije otvorio, potražite **Help → Setup Wizard**.
+
+1. Za lokalno izvođenje odaberite **Run appliances on my local computer**, kao na slici, i kliknite **Next**.
+
+   ![Odabir pokretanja uređaja na lokalnom računalu u čarobnjaku GNS3-a.](Slike/Run_on_local.png){width=650 fig-align="center"}
+
+2. Provjerite ponuđenu putanju do GNS3 poslužitelja, **Server path**. Na standardnoj instalaciji zadržite automatski pronađenu putanju. Slika prikazuje primjer na macOS-u, na Windowsima putanja će biti drukčija.
+3. U polju **Host binding** odaberite `localhost` i zadržite ponuđeni port. `localhost` je naziv koji označava vlastito računalo. Ovime određujemo kako se GNS3 povezuje s lokalnim poslužiteljem, a ne adresu virtualnog uređaja.
+
+   ![Postavke lokalnog GNS3 poslužitelja s nazivom localhost i portom 3080 TCP.](Slike/server_settings.png){width=650 fig-align="center"}
+
+4. Kliknite **Next**, dovršite čarobnjak (u ostalim koracima ne mjenjamo ništa) i provjerite da nema poruke o neuspješnom povezivanju s poslužiteljem.
+
+## Pokretanje prvog čvora
+
+Otvoren program još ne potvrđuje da se uređaji mogu pokretati. Zato ćemo napraviti projekt s jednim VPCS čvorom i otvoriti njegovu konzolu.
+
+1. Odaberite **File → New blank project**.
+2. Projekt nazovite `MS_V0_Provjera`.
+3. Na lijevoj alatnoj traci kliknite ikonu računala za prikaz krajnjih uređaja (**End devices**). U popisu pronađite **VPCS** i povucite ga na radnu površinu.
+
+   ![Odabir VPCS-a u skupini krajnjih uređaja u GNS3-u.](Slike/VPCS.png){width=900 fig-align="center" fig-alt="Na lijevoj alatnoj traci zaokružena je ikona računala za skupinu End devices, a strelica pokazuje VPCS u popisu uređaja."}
+
+4. Ako se traži odabir poslužitelja, odaberite prethodno pripremljeni poslužitelj.
+5. Čvor preimenujte u `PC1` ako već nema taj naziv.
+6. Desnom tipkom otvorite izbornik čvora i odaberite **Start**, a zatim **Console**.
+7. U konzolu upišite:
+
+```text
+show ip
+```
+
+Naredba prikazuje mrežne postavke VPCS uređaja. U novom čvoru IP adresa može biti prikazana kao `0.0.0.0`, što ovdje znači da još nije postavljena. U ovom koraku provjeravamo može li se uređaj pokrenuti i prihvaća li naredbu, pa mu još ne dodjeljujemo adresu.
+
+Naziv `PC1` označava čvor u projektu. Njegovo preimenovanje samo po sebi ne mijenja mrežne postavke. Također, konzola tog čvora odvojena je od terminala vašeg fizičkog računala: `show ip` upisujemo u VPCS konzolu.
+
+![Prikaz terminala i očekivani ispis napredbe `show ip`](Slike/show_ip_command.png){width=900 fig-align="center" fig-alt="Prikaz terminala."}
+
+::: {.callout-caution title="Pregled naredbi i radnji"}
+| Radnja | Gdje se izvodi? | Namjena |
+|---|---|---|
+| `File → New blank project` | Grafičko sučelje GNS3-a | Izrada novog projekta |
+| `Start` | Izbornik čvora | Pokretanje odabranog uređaja |
+| `Console` | Izbornik čvora | Otvaranje konzole uređaja |
+| `show ip` | VPCS konzola | Prikaz mrežnih postavki čvora |
+| `save` | Konzola svakog VPCS-a | Spremanje trenutačne konfiguracije za sljedeće pokretanje |
+| `Stop` | Izbornik čvora | Zaustavljanje odabranog uređaja |
+:::
+
+## Ako se čvor ili konzola ne pokreću
+
+Najprije utvrdite u kojem se koraku pojavljuje problem. Ako GNS3 ne može pristupiti poslužitelju, problem prethodi izvršavanju VPCS-a. Ako se čvor pokrene, ali se ne otvara konzola, treba provjeriti program kojim GNS3 otvara terminal.
+
+| Opažanje | Što prvo provjeriti? |
+|---|---|
+| GNS3 javlja da poslužitelj nije dostupan | Postavke poslužitelja i je li instalirana poslužiteljska komponenta |
+| VPCS nije u popisu uređaja ili se ne pokreće | Instalaciju VPCS-a i njegovu putanju u postavkama |
+| Čvor radi, ali se konzola ne otvara | Odabrani konzolni program u GNS3 postavkama |
+| `show ip` nije prepoznat | Je li naredba unesena u VPCS konzolu |
+
+Zabilježite točnu poruku pogreške prije promjene postavki. Ako problem ne možete riješiti navedenom provjerom, slobodno se javite mutem Google Chat-a ili e-maila.
+
+## Spremanje konfiguracije i izvoz projekta
+
+Kada završite zadatak i želite ga predati, najprije spremite konfiguraciju svakog uređaja. Postavke koje ste unijeli tijekom rada nisu nužno spremljene za sljedeće pokretanje uređaja.
+
+Na **svakom VPCS-u zasebno**, dok je još pokrenut, otvorite konzolu i izvršite:
+
+```bash
+save
+```
+
+Naredba sprema trenutačnu konfiguraciju u datoteku `startup.vpc`. To je početna (*startup*) konfiguracija koju VPCS učitava pri sljedećem pokretanju. Ako projekt sadrži više VPCS uređaja, naredbu morate izvršiti na svakome od njih.
+
+::: {.callout-warning title="Spremanje konfiguracije uređaja"}
+Spremanje ili izvoz GNS3 projekta ne zamjenjuje spremanje konfiguracije unutar uređaja. Prije zaustavljanja VPCS-a izvršite `save` kako se unesene postavke ne bi izgubile.
+
+Konfiguraciju će trebati spremati i na drugim uređajima koje ćemo koristiti. Naredba nije ista za sve uređaje, odgovarajuću naredbu navest ćemo kada budemo radili s tim uređajem.
+:::
+
+Nakon spremanja konfiguracija izvezite projekt za predaju:
+
+1. Zaustavite sve uređaje u projektu.
+2. U GNS3-u odaberite **File → Export portable project**.
+3. Odaberite naziv i mjesto spremanja izvezene datoteke te dovršite izvoz.
+4. Za predaju pošaljite dobivenu datoteku **`.gns3project`**.
+
+::: {.callout-important title="Predaja projekta"}
+**Nemojte ručno ZIP-irati cijelu mapu projekta i slati taj ZIP.** Predaje se datoteka nastala izvozom projekta kroz GNS3, koja sadrži topologiju i pripadajuće datoteke projekta, uključujući spremljene konfiguracije VPCS uređaja.
+:::
+
+# Samostalni zadaci
+
+Zadaci služe isključivo za dodatnu vježbu. **Nisu obavezni i ne boduju se.**
+
+Zadaci su u ovoj vježbi teorijski. Odgovore zapišite uz broj zadatka, a sheme nacrtajte na papiru ili u alatu za crtanje. Za njihovo rješavanje nije potrebno koristiti GNS3 niti dodavati virtualne uređaje. **U narednim vježbama zadaci će biti praktični, uz izradu i konfiguriranje mreža u GNS3-u nakon što obradimo potrebne uređaje i postupke.** Rješenja se nalaze u sljedećem poglavlju.
+
+## Zadatak 1
+
+U uredu su tri računala, mrežni pisač, preklopnik i usmjernik. Računala i pisač pripadaju istoj lokalnoj IP mreži i zasebnim su kabelima povezani s preklopnikom. Preklopnik je povezan s usmjernikom koji omogućuje pristup drugim mrežama.
+
+Na papiru ili u alatu za crtanje nacrtajte shemu, označite krajnje i posredničke uređaje te napišite put dokumenta od jednog računala do pisača. Zatim označite početak puta prema web-poslužitelju u drugoj mreži. Objasnite ulogu preklopnika i usmjernika u tim prijenosima.
+
+## Zadatak 2
+
+Laptop je s mrežom povezan preko Wi-Fi veze, a njegovo je Ethernet sučelje prikazano u postavkama kao nepovezano.
+
+Odredite aktivno sučelje i prijenosni medij. Objasnite zašto to što je Ethernet sučelje navedeno u postavkama ne znači da se koristi. Ako laptop priključimo bakrenim Ethernet kabelom, koja se vrsta signala koristi za prijenos preko tog medija?
+
+## Zadatak 3
+
+Koristite shemu koju ste nacrtali u zadatku 1. Za svaki slučaj odredite može li prvo računalo ispisivati na lokalni pisač i može li pristupiti poslužitelju u drugoj mreži:
+
+1. Prekinut je kabel samo drugog računala.
+2. Isključen je jedini preklopnik.
+3. Isključen je usmjernik, a lokalni uređaji i preklopnik rade.
+
+Pretpostavite da lokalni ispis ne ovisi o vanjskim uslugama i da ne postoji alternativni put prema drugoj mreži. Svaki odgovor kratko obrazložite.
+
+## Zadatak 4
+
+Sljedećim opisima pridružite sloj petoslojnog internetskog modela. Za usporedbu navedite i odgovarajući OSI sloj:
+
+1. Podaci se preko bakrenog kabela prenose električkim signalima.
+2. Preklopnik prosljeđuje Ethernet okvir.
+3. IP paket usmjerava se prema odredišnoj mreži.
+4. TCP povezuje prijenos podataka s određenom komunikacijom programa.
+5. Tekst se prikazuje prema dogovorenom kodiranju.
+6. HTTP određuje oblik zahtjeva za web-sadržajem.
+
+Objasnite zašto aplikacijski sloj OSI modela ne obuhvaća sve što korisnički program radi.
+
+## Zadatak 5
+
+Student u pregledniku otvara stranicu fakulteta. Preglednik šalje zahtjev za sadržajem stranice, a web-poslužitelj vraća traženi sadržaj. Istodobno istu stranicu otvara još nekoliko studenata.
+
+1. Tko u opisanoj razmjeni ima ulogu klijenta, a tko poslužitelja?
+2. Koja se mrežna usluga koristi i što su u ovom primjeru zahtjev i odgovor?
+3. Može li isti poslužitelj pružati uslugu većem broju klijenata?
+4. Objasnite razliku između weba i Interneta na ovom primjeru.
+
+## Zadatak 6
+
+Dva su računala povezana mrežom. Program na prvom računalu šalje zahtjev za datotekom, ali program na drugome ne prepoznaje oblik tog zahtjeva i ne zna što treba vratiti.
+
+1. Zašto sama mrežna povezanost nije dovoljna za uspješnu razmjenu datoteke?
+2. Što je protokol i o kojim se pravilima sudionici trebaju usuglasiti? Navedite barem dva primjera pravila.
+3. Kojem sloju internetskog modela pripadaju pravila zahtjeva i odgovora za tu mrežnu uslugu?
+
+# Rješenja samostalnih zadataka
+
+## Rješenje zadatka 1
+
+<details>
+<summary>Prikaži moguću shemu i objašnjenje</summary>
+
+```text
+PC1 ─┐
+PC2 ─┼── SW1 ── R1 ── Druge mreže
+PC3 ─┤
+Pisač┘
+```
+
+Svaki krajnji uređaj ima zasebnu vezu prema `SW1`. Računala i pisač krajnji su uređaji, a `SW1` i `R1` posrednički. Lokalni dio ima topologiju zvijezde.
+
+Put ispisa s prvog računala je `PC1 → SW1 → pisač`. Put prema poslužitelju u drugoj mreži počinje s `PC1 → SW1 → R1`, a zatim se nastavlja prema odredištu. Preklopnik prosljeđuje lokalne okvire, dok usmjernik omogućuje prijelaz prema drugim IP mrežama.
+
+</details>
+
+## Rješenje zadatka 2
+
+<details>
+<summary>Prikaži odgovor</summary>
+
+Aktivno je Wi-Fi sučelje, a prijenos se ostvaruje radijskim signalima kroz prostor. Ethernet sučelje postoji na računalu, ali je trenutačno nepovezano i ne koristi se za opisanu vezu.
+
+Preko bakrenog Ethernet kabela podaci se prenose električkim signalima. Promjenom veze mijenjaju se korišteno sučelje i medij, dok računalo i dalje može koristiti iste mrežne usluge.
+
+</details>
+
+## Rješenje zadatka 3
+
+<details>
+<summary>Prikaži posljedice pojedinih kvarova</summary>
+
+| Slučaj | Lokalni ispis s PC1 | Pristup drugoj mreži s PC1 | Obrazloženje |
+|---|---|---|---|
+| Prekinut kabel PC2 | Može raditi | Može raditi | Putevi PC1 ne prolaze kabelom PC2 |
+| Isključen SW1 | Ne radi | Ne radi | Oba potrebna puta prolaze kroz SW1 |
+| Isključen R1 | Može raditi | Ne radi | Lokalni put ostaje dostupan, ali put prema drugoj mreži prolazi kroz R1 |
+
+Zaključci vrijede za zadanu shemu i pretpostavke. Promatramo koji je uređaj ili veza potreban za određeni put, kvar jednog dijela ne prekida automatski svu komunikaciju.
+
+</details>
+
+## Rješenje zadatka 4
+
+<details>
+<summary>Prikaži povezivanje opisa i slojeva</summary>
+
+| Opis | Internetski sloj | OSI sloj |
+|---|---|---|
+| Električki signal preko kabela | Fizički | Fizički |
+| Prosljeđivanje Ethernet okvira | Podatkovne veze | Podatkovne veze |
+| Usmjeravanje IP paketa | Mrežni | Mrežni |
+| TCP komunikacija programa | Transportni | Transportni |
+| Kodiranje teksta | Aplikacijski | Prezentacijski |
+| Pravila HTTP zahtjeva | Aplikacijski | Aplikacijski |
+
+Aplikacijski sloj opisuje mrežne funkcije usluge. Crtanje prozora, promjena boje gumba ili lokalno uređivanje dokumenta dio su korisničkog programa, ali sami po sebi nisu mrežna komunikacija aplikacijskog sloja.
+
+</details>
+
+## Rješenje zadatka 5
+
+<details>
+<summary>Prikaži odgovor</summary>
+
+1. Preglednik ima ulogu klijenta jer šalje zahtjev i koristi uslugu. Web-poslužitelj pruža uslugu: prima zahtjev i vraća odgovor.
+2. Koristi se usluga dohvata web-sadržaja. Zahtjev traži sadržaj određene stranice, a odgovor poslužitelja donosi traženi sadržaj ili obavijest o pogrešci.
+3. Može. Isti web-poslužitelj može obrađivati zahtjeve više klijenata, primjerice preglednika različitih studenata.
+4. Internet je mreža međusobno povezanih mreža preko koje se odvija komunikacija. Web je jedna od usluga dostupnih preko Interneta, u ovom primjeru omogućuje dohvat stranice fakulteta.
+
+</details>
+
+## Rješenje zadatka 6
+
+<details>
+<summary>Prikaži odgovor</summary>
+
+1. Mrežna povezanost omogućuje prijenos podataka, ali programi trebaju razumjeti značenje primljenih poruka. Ako primatelj ne prepoznaje zahtjev, ne može na njega odgovoriti na očekivani način.
+2. Protokol je skup pravila komunikacije. Sudionici se trebaju usuglasiti, primjerice, o obliku zahtjeva, načinu navođenja tražene datoteke, obliku odgovora i poruci kojom se javlja da datoteka ne postoji.
+3. Pravila zahtjeva i odgovora za mrežnu uslugu pripadaju aplikacijskom sloju. Niži slojevi sudjeluju u prijenosu tih poruka.
+
+</details>
+
+<script>
+window.addEventListener("beforeprint", function () {
+  document.querySelectorAll("details").forEach(function (element) {
+    element.open = true;
+  });
+});
+</script>
