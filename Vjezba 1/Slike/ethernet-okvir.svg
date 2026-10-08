@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="250" viewBox="0 0 1000 250" role="img" aria-labelledby="title desc">
+<title id="title">Ethernet II okvir bez VLAN oznake</title><desc id="desc">Okvir sadrži odredišnu MAC adresu od 6 bajtova, izvorišnu od 6, EtherType od 2, podatke i eventualnu dopunu od 46 do 1500 te FCS od 4 bajta. Širine polja na skici nisu u mjerilu.</desc>
+<rect width="1000" height="250" fill="white"/>
+<g font-family="Arial,sans-serif" text-anchor="middle" fill="#071b50">
+<text x="500" y="32" font-size="21" font-weight="bold">Ethernet II — okvir bez VLAN oznake</text>
+<g stroke="#287a91" stroke-width="2"><rect x="30" y="75" width="180" height="95" fill="#dceef8"/><rect x="210" y="75" width="180" height="95" fill="#dceef8"/><rect x="390" y="75" width="120" height="95" fill="#e5e9f6"/><rect x="510" y="75" width="340" height="95" fill="#d6eee8"/><rect x="850" y="75" width="120" height="95" fill="#f7ead0"/></g>
+<g font-size="18" font-weight="bold"><text x="120" y="105">Odredišna MAC</text><text x="300" y="105">Izvorišna MAC</text><text x="450" y="105">EtherType</text><text x="680" y="105">Podaci + eventualna dopuna</text><text x="910" y="105">FCS</text></g>
+<g font-size="18"><text x="120" y="145">6 B</text><text x="300" y="145">6 B</text><text x="450" y="145">2 B</text><text x="680" y="145">46–1500 B</text><text x="910" y="145">4 B</text></g>
+<path d="M30 183 V197 H970 V183" stroke="#071b50" stroke-width="2" fill="none"/>
+<text x="500" y="224" font-size="19">Ukupno 64–1518 B, uključujući FCS</text>
+</g></svg>

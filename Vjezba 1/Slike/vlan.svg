@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="370" viewBox="0 0 1000 370" role="img" aria-labelledby="title desc">
+<title id="title">Dvije logičke mreže na jednom preklopniku</title><desc id="desc">Portovi Ethernet0 i Ethernet1 pripadaju VLAN-u 10, a Ethernet2 VLAN-u 20. PC1 i PC2 mogu komunicirati; PC3 je u zasebnoj broadcast domeni.</desc>
+<rect width="1000" height="370" fill="white"/>
+<g font-family="Arial,sans-serif" text-anchor="middle" fill="#071b50">
+<rect x="25" y="45" width="600" height="160" rx="14" fill="#eef8f5" stroke="#287a91" stroke-width="2" stroke-dasharray="7 5"/><rect x="695" y="45" width="280" height="160" rx="14" fill="#fff6e8" stroke="#a86020" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="325" y="30" font-size="23" font-weight="bold">VLAN 10</text><text x="835" y="30" font-size="23" font-weight="bold">VLAN 20</text>
+<g stroke-width="3" fill="none"><path d="M165 170 V224 H410 V260 M465 170 V260" stroke="#287a91"/><path d="M835 170 V224 H590 V260" stroke="#a86020"/></g>
+<g stroke-width="2"><rect x="85" y="80" width="160" height="90" rx="10" fill="#d6eee8" stroke="#287a91"/><rect x="385" y="80" width="160" height="90" rx="10" fill="#d6eee8" stroke="#287a91"/><rect x="755" y="80" width="160" height="90" rx="10" fill="#f7ead0" stroke="#a86020"/><rect x="350" y="260" width="300" height="70" rx="10" fill="#e5f3f9" stroke="#287a91"/></g>
+<g font-size="23" font-weight="bold"><text x="165" y="114">PC1</text><text x="465" y="114">PC2</text><text x="835" y="114">PC3</text><text x="500" y="305">SW1</text></g>
+<g font-size="17"><text x="165" y="148">192.168.10.1/24</text><text x="465" y="148">192.168.10.2/24</text><text x="835" y="148">192.168.10.3/24</text><text x="265" y="247">Ethernet0</text><text x="530" y="248">Ethernet1</text><text x="740" y="247">Ethernet2</text></g>
+<text x="500" y="358" font-size="17">Isti preklopnik i zadane IP adrese ne znače da svi portovi pripadaju istoj logičkoj mreži.</text>
+</g></svg>

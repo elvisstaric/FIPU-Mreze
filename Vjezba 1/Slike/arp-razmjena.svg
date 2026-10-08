@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="435" viewBox="0 0 1000 435" role="img" aria-labelledby="title desc">
+<title id="title">ARP zahtjev i odgovor</title><desc id="desc">ARP zahtjev računala PC1 upućen je svim uređajima u istom VLAN-u. PC2 prepoznaje traženu IP adresu i šalje unicast odgovor računalu PC1. PC3 nije vlasnik tražene adrese i ne odgovara.</desc>
+<rect width="1000" height="435" fill="white"/>
+<g font-family="Arial,sans-serif" fill="#071b50">
+<text x="40" y="35" font-size="23" font-weight="bold">1. Zahtjev: tko ima 192.168.10.2?</text>
+<g text-anchor="middle"><g fill="#e5f3f9" stroke="#287a91" stroke-width="2"><rect x="40" y="65" width="170" height="75" rx="10"/><rect x="790" y="65" width="170" height="75" rx="10"/><rect x="790" y="160" width="170" height="75" rx="10"/></g><rect x="410" y="90" width="170" height="75" rx="10" fill="#d6eee8" stroke="#287a91" stroke-width="2"/>
+<g font-size="22" font-weight="bold"><text x="125" y="111">PC1</text><text x="495" y="135">SW1</text><text x="875" y="111">PC2</text><text x="875" y="207">PC3</text></g></g>
+<g stroke="#287a91" stroke-width="3" fill="none" stroke-dasharray="9 5"><path d="M210 105 H325 V128 H410 M580 128 H690 V105 H790 M690 128 V198 H790"/></g>
+<text x="45" y="188" font-size="17">Odredišna MAC:</text><text x="45" y="215" font-size="18" font-weight="bold">ff:ff:ff:ff:ff:ff</text>
+<text x="590" y="64" font-size="16">PC2 odgovara jer ima traženu IP adresu.</text>
+<text x="590" y="261" font-size="16">PC3 prima zahtjev, ali nije traženo odredište.</text>
+<path d="M40 286 H960" stroke="#d8dfe5" stroke-width="2"/>
+<text x="40" y="322" font-size="23" font-weight="bold">2. Odgovor: 192.168.10.2 ima MAC adresu računala PC2.</text>
+<g text-anchor="middle"><g fill="#e5f3f9" stroke="#287a91" stroke-width="2"><rect x="40" y="346" width="170" height="60" rx="10"/><rect x="790" y="346" width="170" height="60" rx="10"/></g><rect x="410" y="346" width="170" height="60" rx="10" fill="#d6eee8" stroke="#287a91" stroke-width="2"/><g font-size="22" font-weight="bold"><text x="125" y="384">PC1</text><text x="495" y="384">SW1</text><text x="875" y="384">PC2</text></g></g>
+<g stroke="#071b50" stroke-width="3" fill="none"><path d="M790 376 H580 M410 376 H210 M225 367 L210 376 L225 385 M595 367 L580 376 L595 385"/></g>
+</g></svg>
